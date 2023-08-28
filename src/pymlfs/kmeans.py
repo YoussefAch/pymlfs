@@ -146,7 +146,8 @@ class Kmeans:
         Returns
         -------
         bool
-            return True if the conditions of the stopping criterion are satisfied.
+            returns True if the conditions of the stopping criterion are
+            satisfied.
         """
         # Either the maxmimum number of iterations is reached
         # or the centroids do not move.

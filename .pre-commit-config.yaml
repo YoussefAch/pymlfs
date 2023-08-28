@@ -16,6 +16,15 @@ repos:
     rev: v3.0.0a7
     hooks:
     - id: pylint
+      name: pylint
+      entry: pylint
+      language: system
+      types: [python]
+      args:
+        [
+          --ignore-imports=y,
+          --fail-under=2
+        ]
 -   repo: https://github.com/pre-commit/mirrors-mypy
     rev: 'v1.5.1'  
     hooks:
