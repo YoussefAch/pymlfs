@@ -1,0 +1,29 @@
+name: Test pipeline
+on:
+  pull_request:
+    paths:
+      - src/**
+      - tests/**
+      - .github/workflows/test_pipeline.yaml
+jobs:
+  test_model:
+    name: Run tests for code 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 
+        id: checkout
+        uses: actions/checkout@v3
+
+      - name: Environment setup
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        
+      - name: Install packages
+        run: poetry install
+
+      - name: Run tests
+        run: poetry run pytest 
