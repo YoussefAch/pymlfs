@@ -41,6 +41,7 @@ class Kmeans:
             The training data (m x n) with m being the number of examples
             and n the number of features.
         """
+
         self.m, self.n = X.shape
         self.centroids = torch.rand(self.k, self.n)
 
