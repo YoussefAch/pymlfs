@@ -5,14 +5,15 @@ __author__ = "Youssef Achenchabe"
 __license__ = "MIT"
 __email__ = "youssef.achenchabe@gmail.com"
 """
-from pymlfs.kmeans import Kmeans
 import torch
+from pymlfs.kmeans import Kmeans
+
 
 
 def test_kmeans(example_data: torch.Tensor) -> None:
     """
     Light test to check if kmeans centroids are close to the actual
-    means of the gaussians used to generate data.
+    means of the gaussians used to generate the input data.
     """
 
     X, mean1, mean2, _, _ = example_data
