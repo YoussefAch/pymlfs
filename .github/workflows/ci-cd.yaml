@@ -1,29 +1,86 @@
-name: Test pipeline
-on:
-  pull_request:
-    paths:
-      - src/**
-      - tests/**
-      - .github/workflows/test_pipeline.yaml
+name: ci-cd
+
+on: [push, pull_request]
+
 jobs:
-  test_model:
-    name: Run tests for code 
+  ci:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout 
-        id: checkout
-        uses: actions/checkout@v3
+    - name: Checkout 
+      id: checkout
+      uses: actions/checkout@v3
 
-      - name: Environment setup
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
+    - name: Environment setup
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        
-      - name: Install packages
-        run: poetry install
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      
+    - name: Install packages
+      run: poetry install
 
-      - name: Run tests
-        run: poetry run pytest 
+    - name: Test with pytest
+      run: poetry run pytest tests/ --cov=pycounts --cov-report=xml
+
+    - name: Use Codecov to track coverage
+      uses: codecov/codecov-action@v2
+      with:
+        files: ./coverage.xml
+
+    - name: Build documentation
+      run: poetry run make html --directory docs/
+
+  cd:
+    needs: ci
+    
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Check-out repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Install poetry
+      uses: snok/install-poetry@v1
+
+    - name: Install package
+      run: poetry install
+
+    - name: Prepare release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          poetry run semantic-release publish
+
+    - name: Publish to TestPyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        repository_url: https://test.pypi.org/legacy/
+
+    - name: Test install from TestPyPI
+      run: |
+          pip install \
+          --index-url https://test.pypi.org/simple/ \
+          --extra-index-url https://pypi.org/simple \
+          pycounts
+
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}
