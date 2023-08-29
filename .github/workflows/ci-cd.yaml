@@ -23,7 +23,7 @@ jobs:
       run: poetry install
 
     - name: Test with pytest
-      run: poetry run pytest tests/ --cov=pycounts --cov-report=xml
+      run: poetry run pytest tests/ --cov=pymlfs --cov-report=xml
 
     - name: Use Codecov to track coverage
       uses: codecov/codecov-action@v2
@@ -76,7 +76,7 @@ jobs:
           pip install \
           --index-url https://test.pypi.org/simple/ \
           --extra-index-url https://pypi.org/simple \
-          pycounts
+          pymlfs
 
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
