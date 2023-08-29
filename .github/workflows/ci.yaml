@@ -1,14 +1,13 @@
-name: Test pipeline
-on:
-  pull_request:
-    paths:
-      - src/**
-      - tests/**
-      - .github/workflows/test_pipeline.yaml
+name: Continuous-Integration
+
+on: [push, pull_request]
+
 jobs:
-  test_model:
-    name: Run tests for code 
+  Continuous-Integration:
+    # Set up operating system
     runs-on: ubuntu-latest
+
+    # Define job steps
     steps:
       - name: Checkout 
         id: checkout
@@ -26,4 +25,12 @@ jobs:
         run: poetry install
 
       - name: Run tests
-        run: poetry run pytest 
+        run: poetry run pytest tests/ --cov=pycounts --cov-report=xml
+
+      - name: Track test coverage
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./coverage.xml   # coverage report
+
+      - name: Build docs
+        run: poetry run make html --directory docs/
