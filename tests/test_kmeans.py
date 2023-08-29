@@ -1,5 +1,5 @@
 """
-K-means algorithm test class
+K-means algorithm tests
 
 __author__ = "Youssef Achenchabe"
 __license__ = "MIT"
