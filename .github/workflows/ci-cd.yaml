@@ -41,20 +41,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set up Python 3.9
+    - name: Checkout 
+      id: checkout
+      uses: actions/checkout@v3
+
+    - name: Environment setup
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
 
-    - name: Check-out repository
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-
-    - name: Install poetry
+    - name: Install Poetry
       uses: snok/install-poetry@v1
-
-    - name: Install package
+      
+    - name: Install packages
       run: poetry install
 
     - name: Prepare release
