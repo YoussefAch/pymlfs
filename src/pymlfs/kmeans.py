@@ -86,7 +86,7 @@ class Kmeans:
 
         This method performs the expectation step of the EM algorithm.
         In other words, it assigns a cluster to every training point
-        given the cluster centroids.
+        given the cluster's centroids.
 
         Parameters
         ----------
