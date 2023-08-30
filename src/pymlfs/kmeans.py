@@ -1,10 +1,3 @@
-"""
-K-means algorithm class
-
-__author__ = "Youssef Achenchabe"
-__license__ = "MIT"
-__email__ = "youssef.achenchabe@gmail.com"
-"""
 import logging
 import torch
 from tqdm import tqdm
